@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 """ Tools for manipulating the alignments seralized file """
+import sys
 import logging
-from .lib_alignments import (AlignmentData, Check, Dfl, Draw, # noqa pylint: disable=unused-import
-                             Extract, Fix, Manual,Edge, Merge, Rename,
-                             RemoveAlignments, Sort, Spatial, UpdateHashes)
+
+from .media import AlignmentData
+from .jobs import (Check, Dfl, Draw, Extract, Fix, Merge,  # noqa pylint: disable=unused-import
+                   Rename, RemoveAlignments, Sort, Spatial, UpdateHashes)
+from .jobs_manual import Manual  # noqa pylint: disable=unused-import
+from .jobs_edge import Edge
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -23,10 +27,10 @@ class Alignments():
             return
         if len(self.args.alignments_file) > 1 and self.args.job != "merge":
             logger.error("Multiple alignments files are only permitted for merging")
-            exit(0)
+            sys.exit(0)
         if len(self.args.alignments_file) == 1 and self.args.job == "merge":
             logger.error("More than one alignments file required for merging")
-            exit(0)
+            sys.exit(0)
 
         if len(self.args.alignments_file) == 1:
             retval = AlignmentData(self.args.alignments_file[0])
